@@ -11,7 +11,7 @@ import utime
 # GP16 is the speaker pin
 SPEAKER_PIN = 16
 
-# create a Pulse Width Modulation Object on this pin
+# create a Pulse Width Modupulation Object on this pin
 speaker = machine.PWM(machine.Pin(SPEAKER_PIN))
 
 
