@@ -191,7 +191,7 @@ def get_user_data(id_token):
 
 def main():
     # Connect to Wi-Fi
-    connect_to_wifi('your-SSID', 'your-password')
+    # connect_to_wifi('your-SSID', 'your-password')
 
     # Authentication Loop
     while True:
@@ -231,6 +231,7 @@ def main():
             # Run your test and get data
             data = game()
             if data:
+                data = json.dumps(data)
                 send_data_to_api(id_token, data)
         elif choice == '3':
             print('Logging out...')
