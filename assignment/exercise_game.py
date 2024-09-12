@@ -3,6 +3,7 @@ import json
 import time
 from machine import Pin
 import random
+import network
 
 
 API_BASE_URL = "https://flask-api-560047854310.us-east1.run.app"
@@ -160,7 +161,7 @@ def send_data_to_api(id_token, data):
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {id_token}'
         }
-        response = urequests.post(DATA_URL, headers=headers, json=data)
+        response = urequests.post(DATA_URL, headers=headers, data=data)
         if response.status_code == 200:
             print('Data sent successfully.')
         else:
@@ -190,8 +191,29 @@ def get_user_data(id_token):
 
 
 def main():
-    # Connect to Wi-Fi
-    connect_to_wifi('your-SSID', 'your-password')
+        # Connect to Wi-Fi
+    SSID = 'BU Guest (unencrypted)'
+
+    # Initialize the Wi-Fi interface
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+
+    # Connect to the Wi-Fi network
+    print('Connecting to network...')
+    wlan.connect(SSID)
+
+    # Wait for the connection to establish
+    timeout = 10  # seconds
+    start_time = time.time()
+    while not wlan.isconnected() and (time.time() - start_time) < timeout:
+        time.sleep(1)
+
+    # Check if connected
+    if wlan.isconnected():
+        print('Connected!')
+        print('Network config:', wlan.ifconfig())
+    else:
+        print('Failed to connect.')
 
     # Authentication Loop
     while True:
@@ -231,6 +253,7 @@ def main():
             # Run your test and get data
             data = game()
             if data:
+                data = json.dumps(data)
                 send_data_to_api(id_token, data)
         elif choice == '3':
             print('Logging out...')
