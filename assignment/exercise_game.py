@@ -3,6 +3,7 @@ import json
 import time
 from machine import Pin
 import random
+import network
 
 
 API_BASE_URL = "https://flask-api-560047854310.us-east1.run.app"
@@ -109,12 +110,10 @@ def register_user():
         return None
 
     password = input('Create a password: ')
-    display_name = input('Enter your display name: ')
 
     data = {
         'email': email,
-        'password': password,
-        'display_name': display_name
+        'password': password
     }
 
     try:
@@ -160,7 +159,7 @@ def send_data_to_api(id_token, data):
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {id_token}'
         }
-        response = urequests.post(DATA_URL, headers=headers, json=data)
+        response = urequests.post(DATA_URL, headers=headers, data=data)
         if response.status_code == 200:
             print('Data sent successfully.')
         else:
@@ -189,9 +188,37 @@ def get_user_data(id_token):
         print('Error fetching user data:', e)
 
 
+
+def print_ascii_box():
+    message = 'Playing game. Please check your microcontroller.'
+    box_width = len(message) + 4  
+    print('#' * box_width)
+    print(f'# {message} #')
+    print('#' * box_width)
+
 def main():
-    # Connect to Wi-Fi
-    # connect_to_wifi('your-SSID', 'your-password')
+        # Connect to Wi-Fi
+    SSID = 'BU Guest (unencrypted)'
+
+    # Initialize the Wi-Fi interface
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+
+    # Connect to the Wi-Fi network
+    print('Connecting to network...')
+    wlan.connect(SSID)
+
+    # Wait for the connection to establish
+    timeout = 10  # seconds
+    start_time = time.time()
+    while not wlan.isconnected() and (time.time() - start_time) < timeout:
+        time.sleep(1)
+
+    # Check if connected
+    if wlan.isconnected():
+        print('Connected!')
+    else:
+        print('Failed to connect.')
 
     # Authentication Loop
     while True:
@@ -229,6 +256,12 @@ def main():
             get_user_data(id_token)
         elif choice == '2':
             # Run your test and get data
+
+
+            print_ascii_box()
+            time.sleep(2)
+
+
             data = game()
             if data:
                 data = json.dumps(data)
