@@ -66,7 +66,7 @@ def register_user():
 
         # Ensure the email is a Gmail address
         if not email.endswith('@gmail.com'):
-            return jsonify({'error': 'Please login with a Gmail address. '}), 400
+            return jsonify({'error': 'Please login with a gmail address. '}), 400
 
         # Create user in Firebase Authentication
         user = auth.create_user(
