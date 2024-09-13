@@ -3,41 +3,35 @@ name: Deploy to Google Cloud Run
 on:
   push:
     paths:
-      - assignment/app.py  # Trigger the workflow only when app.py changes
+      - assignment/app.py  
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Step 2: Set up Google Cloud SDK
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
-        project_id: teak-listener-435221-g2  # Replace with your actual GCP project ID
-        service_account_key: ${{ secrets.GCP_SA_KEY }}  # This must be configured in GitHub Secrets
+        project_id: teak-listener-435221-g2 
+        service_account_key: ${{ secrets.GCP_SA_KEY }} 
         export_default_credentials: true
 
-    # Step 3: Authenticate Docker to push to Google Container Registry (GCR)
     - name: Authenticate Docker with GCR
       run: |
         echo ${{ secrets.GCP_SA_KEY }} | docker login -u _json_key --password-stdin https://gcr.io
 
-    # Step 4: Build the Docker image (note the path to the Dockerfile in 'assignment')
     - name: Build Docker image
       run: |
         docker build -t gcr.io/teak-listener-435221-g2/flask-api ./assignment
 
-    # Step 5: Push the Docker image to Google Container Registry
     - name: Push Docker image to GCR
       run: |
         docker push gcr.io/teak-listener-435221-g2/flask-api
 
-    # Step 6: Deploy the Docker image to Google Cloud Run
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy flask-api \
