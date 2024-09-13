@@ -3,7 +3,7 @@ name: Deploy to Google Cloud Run
 on:
   push:
     paths:
-      - assignment/app.py  
+      - assignment/app.py 
 
 jobs:
   build-and-deploy:
@@ -13,16 +13,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v0
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: teak-listener-435221-g2 
-        service_account_key: ${{ secrets.GCP_SA_KEY }} 
-        export_default_credentials: true
 
     - name: Authenticate Docker with GCR
       run: |
-        echo ${{ secrets.GCP_SA_KEY }} | docker login -u _json_key --password-stdin https://gcr.io
+        gcloud auth configure-docker
 
     - name: Build Docker image
       run: |
