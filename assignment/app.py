@@ -1,4 +1,6 @@
 from flask import Flask, request, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 import firebase_admin
 import os
@@ -10,6 +12,14 @@ app = Flask(__name__)
 
 # Initialize Firebase
 # firebase_admin.initialize_app(cred)
+
+#  RATE LIMITING
+limiter = Limiter(
+    get_remote_address, 
+    app=app,
+    default_limits=["1000 per day"], 
+)
+
 
 firebase_admin.initialize_app()
 db = firestore.client()
@@ -35,6 +45,7 @@ def verify_token(f):
 
 
 @app.route('/user/data', methods=['GET', 'POST']) # type: ignore
+@limiter.limit("200 per day")
 @verify_token
 def user_data():
     try:
@@ -57,6 +68,7 @@ def user_data():
 
 
 @app.route('/user/register', methods=['POST'])
+@limiter.limit("50 per day")
 def register_user():
     try:
         data = request.json
