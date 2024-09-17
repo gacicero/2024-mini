@@ -46,5 +46,4 @@ To run this project, you need the following:
 
 1. Clone this repository or download the project files from the repository.
    ```bash
-   git clone https://github.com/yourusername/reaction-time-game.git
-   cd reaction-time-game
+   git clone https://github.com/gacicero/2024-mini/tree/main
