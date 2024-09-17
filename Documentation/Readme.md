@@ -1,21 +1,50 @@
+# Reaction Time Game with Microcontroller and API Integration
 
+This project implements a reaction time game using a microcontroller (such as a Raspberry Pi Pico W). The game involves an LED that flashes for random intervals, and the user must press a button as quickly as possible. The response times are recorded, analyzed, and stored in a remote API. Users can register and log in to the system, and their game data will be saved under their account. The game also includes a scoring system to track how well the user performs in terms of response times.
 
+The microcontroller connects to a Wi-Fi network to communicate with a Flask API for user authentication and data storage. The API stores each user's performance data, including the average, minimum, and maximum reaction times, as well as a success score.
 
-## Hardware Game  function
-Purpose: Runs the main reaction time game.
-Behavior:
+## Features
 
-    Initializes the LED and button pins.
-        LED is connected to the built-in LED pin.
-        Button is connected to GPIO pin 16 with a pull-up resistor.
-    Signals the start of the game by blinking the LED three times.
-    For N iterations:
-        Waits for a random time interval between 0.5 and 5.0 seconds.
-        Turns the LED on and records the current time (tic).
-        Waits for the user to press the button or for on_ms milliseconds to pass.
-            If the button is pressed, calculates the response time and turns off the LED.
-            If the time exceeds on_ms, turns off the LED and records a missed attempt (None).
-    Signals the end of the game by blinking the LED five times.
-    Calls the scorer function to calculate and display statistics.
-    Returns the statistics dictionary
+- **LED Blinking Game**: The LED flashes randomly, and the user must press a button as quickly as possible to stop it.
+- **Scoring System**: The game tracks the number of missed button presses and calculates the average, minimum, and maximum reaction times. It also generates a success score based on how well the user responds during the game.
+- **User Authentication**: Users can register and log in, with each game session's data stored securely under their account.
+- **Data Storage**: After playing the game, the response times and scores are sent to a remote API and stored in the user's account.
+- **Wi-Fi Connectivity**: The microcontroller connects to a Wi-Fi network to send data to the API.
 
+## Project Structure
+
+- **random_time_interval(tmin: float, tmax: float)**: Generates a random time interval between the specified minimum and maximum values.
+- **blinker(N: int, led: Pin)**: Blinks the LED N times to signal the start or end of the game.
+- **scorer(t: list[int | None])**: Calculates the score and response time statistics, stores the results in a JSON object, and returns it. This function computes the average, minimum, and maximum response times based on the game results and handles any missed button presses.
+- **game()**: Main logic for running the reaction time game. The game runs for a specified number of rounds (N rounds), where the LED flashes for random durations, and the user must press the button. The function returns the computed statistics (average time, minimum time, maximum time, score).
+- **register_user()**: Allows a new user to register with the remote API by providing an email (restricted to Gmail) and password.
+- **login_user()**: Allows an existing user to log in by providing their email and password, returning an authentication token (id_token) if successful.
+- **send_data_to_api(id_token: str, data: dict)**: Sends the user's game data (response times and score) to the API using the authentication token for authorization.
+- **get_user_data(id_token: str)**: Fetches and displays the stored game data (average, minimum, and maximum response times, and score) for the logged-in user from the API.
+- **print_ascii_box()**: Prints a simple ASCII box on the console to indicate that the game is running.
+- **main()**: Main program loop that handles Wi-Fi connection, user authentication, and running the game. After connecting to Wi-Fi, the user is prompted to log in or register. Once authenticated, they can choose to view stored data, play the game, or log out.
+
+## Getting Started
+
+### Requirements
+
+To run this project, you need the following:
+
+- A microcontroller with Wi-Fi capability, such as a Raspberry Pi Pico W.
+- A push button connected to a GPIO pin.
+- An LED (or the onboard LED) connected to a GPIO pin.
+- A remote Flask API for user registration, login, and data storage.
+- A Wi-Fi network with internet access for the microcontroller to connect to the API.
+
+### Hardware Setup
+
+1. Connect an LED to one of the GPIO pins on the microcontroller. If you are using the onboard LED of the Raspberry Pi Pico W, it will be automatically assigned to the pin `"LED"`.
+2. Connect a push button to another GPIO pin (e.g., GPIO Pin 16). This button will be used to register the user's response to the LED flashes.
+
+### Software Setup
+
+1. Clone this repository or download the project files from the repository.
+   ```bash
+   git clone https://github.com/yourusername/reaction-time-game.git
+   cd reaction-time-game
