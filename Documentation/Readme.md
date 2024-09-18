@@ -12,6 +12,12 @@ The microcontroller connects to a Wi-Fi network to communicate with a Flask API 
 - **Data Storage**: After playing the game, the response times and scores are sent to a remote API and stored in the user's account.
 - **Wi-Fi Connectivity**: The microcontroller connects to a Wi-Fi network to send data to the API.
 
+## Challenges
+
+- **Google Cloud Firestore**: It took a while to understand how to connect to the Cloud Firestore API from our own API.
+- **Creation of a Flask API and Google Cloud Run Hosting**: We made this decision to offer a seamless and scalable backend that operated with good practice (through an intermediate API). Hosting our API on Google Cloud Run took a bit of reading documentation but we were eventually successful.
+- **Google Firebase Authentication**: We flipped around numerous designs, one of which even outputted a link that users would click to open their browser. Due to the time and hardware constraints, however, we realized we could not run some of these libraries on the microcontroller's MicroPython environment, and we instead opted to use a simpler Firebase Authentication with Email/Password verification (manually checking for GMail or EDU addresses).
+
 ## Project Structure
 
 - **random_time_interval(tmin: float, tmax: float)**: Generates a random time interval between the specified minimum and maximum values.
