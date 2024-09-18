@@ -1,4 +1,4 @@
-# Reaction Time Game with Microcontroller and API Integration
+# Exercise 3: Reaction Time Game with Microcontroller and API Integration
 
 This project implements a reaction time game using a microcontroller (such as a Raspberry Pi Pico W). The game involves an LED that flashes for random intervals, and the user must press a button as quickly as possible. The response times are recorded, analyzed, and stored in a remote API. Users can register and log in to the system, and their game data will be saved under their account. The game also includes a scoring system to track how well the user performs in terms of response times.
 
@@ -24,6 +24,7 @@ The microcontroller connects to a Wi-Fi network to communicate with a Flask API 
 - **get_user_data(id_token: str)**: Fetches and displays the stored game data (average, minimum, and maximum response times, and score) for the logged-in user from the API.
 - **print_ascii_box()**: Prints a simple ASCII box on the console to indicate that the game is running.
 - **main()**: Main program loop that handles Wi-Fi connection, user authentication, and running the game. After connecting to Wi-Fi, the user is prompted to log in or register. Once authenticated, they can choose to view stored data, play the game, or log out.
+- This project also integrates GitHub Actions, so that whenever we make changes to the structure of the API, we can simply push the file (assignment/app.py) to this repository, and a Docker image will be built, pushed to Google Artifact Registry (GAR), and executed, so that the API will be continuously running with fresh changes. In this way, we have implemented a simple (no testing environment) CI/CD pipeline for our API.
 
 ## Getting Started
 
@@ -34,7 +35,7 @@ To run this project, you need the following:
 - A microcontroller with Wi-Fi capability, such as a Raspberry Pi Pico W.
 - A push button connected to a GPIO pin.
 - An LED (or the onboard LED) connected to a GPIO pin.
-- A remote Flask API for user registration, login, and data storage.
+- A Firebase API key.
 - A Wi-Fi network with internet access for the microcontroller to connect to the API.
 
 ### Hardware Setup
