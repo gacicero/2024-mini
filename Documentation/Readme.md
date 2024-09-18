@@ -2,7 +2,7 @@
 
 This project implements a reaction time game using a microcontroller (such as a Raspberry Pi Pico W). The game involves an LED that flashes for random intervals, and the user must press a button as quickly as possible. The response times are recorded, analyzed, and stored in a remote API. Users can register and log in to the system, and their game data will be saved under their account. The game also includes a scoring system to track how well the user performs in terms of response times.
 
-The microcontroller connects to a Wi-Fi network to communicate with a Flask API for user authentication and data storage. The API stores each user's performance data, including the average, minimum, and maximum reaction times, as well as a success score.
+The microcontroller connects to a Wi-Fi network to communicate with a Flask API for user authentication and data storage. The API sends calls to the Google Cloud Firestore and Firebase Authentication APIs in order to store each user's login information and performance data, including the average, minimum, and maximum reaction times, as well as a success score. The Flask API is hosted on Google Cloud Run and has rate-limiting implemented.
 
 ## Features
 
